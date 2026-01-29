@@ -2,69 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/api/MovieApi.dart';
 import 'package:flutter_application_1/data/api/repository_implementation/MovieRepository.dart';
 import 'package:flutter_application_1/presentation/controller/MovieController.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MovieScreen extends StatelessWidget {
-  final MovieController controller = MovieController(
-    repository: MovieRepository(movieApi: MovieApi()),
-  );
+class MovieScreen extends ConsumerWidget {
+  // final MovieController controller = MovieController(
+  //   repository: MovieRepository(movieApi: MovieApi()),
+  // );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final moviesAsync = ref.watch(movieController);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Liste des films Star Wars',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            letterSpacing: 1.2,
-          ),
-        ),
+        title: const Text('Liste de films Star Wars', style: TextStyle(color: Colors.white)), 
         backgroundColor: Colors.deepPurple,
-        centerTitle: true,
       ),
-      body: FutureBuilder(
-        future: controller.getMovies(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.deepPurple,
-              ),
-            );
-          }
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                'Erreur : ${snapshot.error}',
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.redAccent,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            );
-          }
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-              child: Text(
-                'Aucun film trouvé',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontStyle: FontStyle.italic,
-                  color: Colors.grey,
-                ),
-              ),
-            );
-          }
-
-          final movies = snapshot.data!;
-
-          return ListView.builder(
-            itemCount: movies.length,
-            itemBuilder: (context, index) {
+      body: moviesAsync.when(
+      data: (movies) {
+        return ListView.builder(
+          itemCount: movies.length,
+                      itemBuilder: (context, index) {
               final movie = movies[index];
 
               return Padding(
@@ -121,8 +79,10 @@ class MovieScreen extends StatelessWidget {
                 ),
               );
             },
-          );
-        },
+        );
+      },
+      error: (error, stackTrace) => Center(child: Text('Error: $error')),
+        loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
   }
