@@ -106,7 +106,6 @@ class MovieScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         SizedBox(
-                          width: double.infinity, // prend toute la largeur du Card
                           child: Text(
                             movie.description,
                             style: const TextStyle(
