@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nuage/data/repositories/auth_repository_impl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(url: 'https://xrtbvstaflwmuwwafyih.supabase.co', publishableKey: 'sb_publishable_5xyeAktbLOo2jp7CqtKYTA_R4uIMfcg');
+
+  final auth = AuthRepositoryImpl(Supabase.instance.client);
+  await auth.ensureSignedIn();
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

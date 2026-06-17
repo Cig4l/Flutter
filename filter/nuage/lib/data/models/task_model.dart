@@ -18,6 +18,6 @@ class TaskModel extends Task {
     );
   }
   Map<String, dynamic> toJson() {
-    return {'id': id, 'title': title, 'category': category, 'icon_path': iconPath, 'is_done': isDone};
+    return {'id': id, 'title': title, 'category': category,'icon_path': iconPath, 'is_done': isDone};
   }
 }
