@@ -1,4 +1,5 @@
 enum TaskCategory {
+  unknown,
   hygiene,
   work,
   social,

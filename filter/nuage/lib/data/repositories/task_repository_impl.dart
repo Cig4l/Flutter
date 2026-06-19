@@ -12,12 +12,12 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<List<Task>> getTasks() async {
     final rows = await _client.from(_table).select();
-    return rows.map(TaskMapper.fromJson).toList(); // JSON => entity
+    return rows.map(TaskMapper.fromJson).toList(); 
   }
 
   @override
   Future<void> addTask(Task task) async {
-    await _client.from(_table).insert(TaskMapper.toJson(task)); // entity => JSON
+    await _client.from(_table).insert(TaskMapper.toJson(task)); 
   }
 
   @override
