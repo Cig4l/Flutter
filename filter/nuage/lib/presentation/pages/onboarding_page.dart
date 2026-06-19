@@ -39,10 +39,7 @@ class OnboardingPage extends ConsumerWidget {
                         const Text(
                           'An egg has been entrusted to you. Complete your '
                           'tasks to nurture the creature growing inside, and '
-                          'soon it will hatch into your very own companion. '
-                          'Raise it well, and one day it\'ll set off on its '
-                          'own adventures, bringing back rare treasures for '
-                          'you to collect.',
+                          'soon it will hatch into your very own companion.',
                           style: TextStyle(
                             color: AppColors.startSubtitleText,
                             fontSize: 17,
@@ -52,7 +49,7 @@ class OnboardingPage extends ConsumerWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 16),
                           child: Image.asset(
-                            'assets/images/egg.png',
+                            'assets/images/dragon/egg.png',
                             height: 150,
                           ),
                         ),

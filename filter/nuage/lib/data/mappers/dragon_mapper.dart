@@ -5,7 +5,6 @@ class DragonMapper {
   static Dragon fromJson(Map<String, dynamic> json) => Dragon(
     id: json['id'] as String,
     name: json['name'] as String? ?? '',
-    age: json['age'] as String? ?? '0',
     level: Level.values.byName(json['level'] as String),
     currentExp: json['current_exp'] as int? ?? 0,
   );
@@ -13,7 +12,6 @@ class DragonMapper {
   static Map<String, dynamic> toJson(Dragon dragon) => {
     'id': dragon.id,
     'name': dragon.name,
-    'age': dragon.age,
     'level': dragon.level.name,
     'current_exp': dragon.currentExp,
   };
