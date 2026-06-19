@@ -1,8 +1,10 @@
 enum TaskCategory {
   unknown,
+  calm,
+  selfKindness,
   hygiene,
   work,
-  social,
+  connection,
   pets,
   housework,
   nutrition,

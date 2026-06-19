@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nuage/presentation/controllers/onboarding_controller.dart';
+import 'package:nuage/presentation/pages/home_page.dart';
 import 'package:nuage/presentation/pages/onboarding_page.dart';
 import 'package:nuage/presentation/themes/app_colors.dart';
 import 'package:nuage/presentation/widgets/dragon_avatar.dart';
@@ -15,10 +16,9 @@ class StartPage extends ConsumerWidget {
     if (!context.mounted) return;
 
     if (hasCompleted) {
-      // TODO: remplacer par écran d'accueil
-      // Navigator.of(context).pushReplacement(
-      //   MaterialPageRoute(builder: (_) => const HomePage()),
-      // );
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const HomePage()),
+      );
     } else {
       Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => const OnboardingPage()),

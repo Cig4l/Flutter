@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nuage/core/providers.dart';
+import 'package:nuage/domain/entities/dragon.dart';
 import 'package:nuage/presentation/controllers/onboarding_controller.dart';
+import 'package:nuage/presentation/pages/home_page.dart';
 import 'package:nuage/presentation/themes/app_colors.dart';
+import 'package:uuid/uuid.dart';
 
 class OnboardingPage extends ConsumerWidget {
   const OnboardingPage({super.key});
 
   Future<void> _onStartPressed(BuildContext context, WidgetRef ref) async {
     await ref.read(onboardingRepositoryProvider).completeOnboarding();
+      await ref.read(dragonRepositoryProvider).createDragon(
+        Dragon.initial(dragonId: const Uuid().v4()),
+      );
     if (!context.mounted) return;
-    // TODO: enchaîner sur l'écran d'éclosion de l'œuf
+
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const HomePage()));
   }
 
   @override

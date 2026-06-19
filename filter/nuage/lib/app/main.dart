@@ -18,9 +18,9 @@ Future<void> main() async {
 
   // print('Anon user id: ${Supabase.instance.client.auth.currentUser?.id}');
 
-  await Supabase.instance.client.auth.signOut();    // test
+  // await Supabase.instance.client.auth.signOut();    // test
   final prefs = await SharedPreferences.getInstance();
-  await prefs.clear();                              // test
+  // await prefs.clear();                              // test
 
   runApp(
     ProviderScope(

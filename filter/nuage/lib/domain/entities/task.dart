@@ -6,13 +6,11 @@ class Task {
   final String title;
   final TaskCategory category;
   final DateTime? completedAt;
-  final String icon;
   const Task({
     required this.id,
     required this.title,
     required this.category,
     required this.completedAt,
-    required this.icon,
   });
 
   bool get isDone {
@@ -42,7 +40,6 @@ class Task {
       title: title ?? this.title,
       category: category ?? this.category,
       completedAt: completedAt ?? this.completedAt,
-      icon: icon ?? this.icon
     );
   }
 }

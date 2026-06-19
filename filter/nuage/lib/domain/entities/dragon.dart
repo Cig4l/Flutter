@@ -15,6 +15,13 @@ class Dragon {
     required this.currentExp,
   });
 
+  factory Dragon.initial({required String dragonId}) => Dragon(
+    id: dragonId, 
+    name: '', 
+    level: Level.one, 
+    currentExp: 0
+  );
+
   Dragon gainExp() {
     if(currentExp +1 < level.maxExp) {
       return copyWith(currentExp: this.currentExp + 1);
