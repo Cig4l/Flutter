@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-class AppColors {
-  AppColors._(); 
+class StartUi {
+  StartUi._(); 
 
   static const Color launchBackground = Color(0xFF6C7CE8); 
 
-  // Start screen styling
   static const Color startButtonBackground = Colors.white;
   static const Color startButtonText = Color(0xFF2D2D3A);
   static const Color startTitleText = Colors.white;

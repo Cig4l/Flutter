@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nuage/core/providers.dart';
 import 'package:nuage/domain/entities/dragon.dart';
-import 'package:nuage/presentation/controllers/onboarding_controller.dart';
 import 'package:nuage/presentation/pages/home_page.dart';
-import 'package:nuage/presentation/themes/app_colors.dart';
+import 'package:nuage/presentation/themes/start_ui.dart';
 import 'package:uuid/uuid.dart';
 
 class OnboardingPage extends ConsumerWidget {
   const OnboardingPage({super.key});
 
   Future<void> _onStartPressed(BuildContext context, WidgetRef ref) async {
-    await ref.read(onboardingRepositoryProvider).completeOnboarding();
       await ref.read(dragonRepositoryProvider).createDragon(
         Dragon.initial(dragonId: const Uuid().v4()),
       );
@@ -25,7 +23,7 @@ class OnboardingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: AppColors.launchBackground,
+      backgroundColor: StartUi.launchBackground,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -40,7 +38,7 @@ class OnboardingPage extends ConsumerWidget {
                         const Text(
                           'Hello, adventurer! 🐉',
                           style: TextStyle(
-                            color: AppColors.startTitleText,
+                            color: StartUi.startTitleText,
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
@@ -51,7 +49,7 @@ class OnboardingPage extends ConsumerWidget {
                           'tasks to nurture the creature growing inside, and '
                           'soon it will hatch into your very own companion.',
                           style: TextStyle(
-                            color: AppColors.startSubtitleText,
+                            color: StartUi.startSubtitleText,
                             fontSize: 17,
                             height: 1.5,
                           ),
@@ -73,8 +71,8 @@ class OnboardingPage extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () => _onStartPressed(context, ref),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.startButtonBackground,
-                    foregroundColor: AppColors.startButtonText,
+                    backgroundColor: StartUi.startButtonBackground,
+                    foregroundColor: StartUi.startButtonText,
                     minimumSize: const Size.fromHeight(60),
                     elevation: 0,
                     shape: RoundedRectangleBorder(

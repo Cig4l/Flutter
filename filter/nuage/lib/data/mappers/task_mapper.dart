@@ -15,6 +15,6 @@ class TaskMapper {
     'id': task.id,
     'title': task.title,
     'category': task.category.name,
-    'completed_at': task.completedAt?.toIso8601String(),
+    'completed_at': task.completedAt?.toUtc().toIso8601String(),
   };
 }

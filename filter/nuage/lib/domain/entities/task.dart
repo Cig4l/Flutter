@@ -33,7 +33,6 @@ class Task {
     String? title,
     TaskCategory? category,
     DateTime? completedAt,
-    String? icon,
   }) {
     return Task(
       id: id ?? this.id,

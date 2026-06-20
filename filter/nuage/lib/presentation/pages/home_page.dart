@@ -4,25 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nuage/domain/entities/dragon.dart';
 import 'package:nuage/domain/entities/task.dart';
 import 'package:nuage/domain/entities/task_category.dart';
+import 'package:nuage/presentation/pages/create_task_page.dart';
 import 'package:nuage/presentation/pages/home_notifier.dart';
+import 'package:nuage/presentation/themes/home_ui.dart';
+import 'package:nuage/presentation/themes/task_category_ui.dart';
 
 // ---------------------------------------------------------------------------
-// Palette
+// Dragon Assets
 // ---------------------------------------------------------------------------
-class _C {
-  static const banner = Color(0xFFF47B3D);
-  static const background = Color(0xFFF6854B);
-  static const card = Colors.white;
-  static const title = Color(0xFF3D2B22);
-  static const expText = Color(0xFF9E9E9E);
-  static const amber = Color(0xFFFFC23C);
-  static const fab = Color(0xFF4CAF50);
-}
-
-// ---------------------------------------------------------------------------
-// Assets
-// ---------------------------------------------------------------------------
-
 String _backgroundAsset(Dragon dragon) {
   switch (dragon.level.index) {
     case 0:
@@ -36,64 +25,47 @@ String _backgroundAsset(Dragon dragon) {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Colors
-// ---------------------------------------------------------------------------
-const _categoryPalette = [
-  Color(0xFFF48FB1),
-  Color(0xFF5B9BD5),
-  Color(0xFF81C784),
-  Color(0xFFFFB74D),
-  Color(0xFFBA68C8),
-];
-
-Color _categoryColor(TaskCategory c) =>
-    _categoryPalette[c.index % _categoryPalette.length];
-
-String _categoryLabel(TaskCategory c) {
-  final spaced = c.name.replaceAllMapped(
-    RegExp(r'(?<=[a-z])(?=[A-Z])'),
-    (_) => ' ',
-  );
-  return spaced.toUpperCase();
-}
+Color CategoryColor(TaskCategory c) =>
+    HomeUi.categoryPalette[c.index % HomeUi.categoryPalette.length];
 
 // ---------------------------------------------------------------------------
-// Page (ConsumerWidget => car read providers through `ref`)
+// Page
 // ---------------------------------------------------------------------------
 class HomePage extends ConsumerWidget {
-  /// Appelé par le bouton +. Branche-y ta navigation vers l'écran de création.
-  final VoidCallback? onCreateTask;
-
-  const HomePage({super.key, this.onCreateTask});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final homeAsync = ref.watch(homeProvider);
 
     return Scaffold(
-      backgroundColor: _C.background,
+      backgroundColor: HomeUi.background,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: _C.fab,
+        backgroundColor: HomeUi.fab,
         elevation: 4,
-        onPressed: onCreateTask,
+        onPressed: () => showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (_) => const CreateTaskPage(),
+        ),
         child: const Icon(Icons.add, color: Colors.white, size: 30),
       ),
       body: homeAsync.when(
         loading: () =>
             const Center(child: CircularProgressIndicator(color: Colors.white)),
-        error: (error, stack) => _CenteredMessage(
+        error: (_, __) => const HomeUienteredMessage(
           emoji: '😵',
-          title: 'Impossible to load the creature',
-          subtitle: '$error',
+          title: 'Impossible to load your creature',
+          subtitle: 'Check your connection and try again.',
         ),
         data: (data) => SingleChildScrollView(
           child: Column(
             children: [
-              _CreatureHeader(dragon: data.dragon),
+              HomeUireatureHeader(dragon: data.dragon),
               _GrowBanner(dragon: data.dragon),
               _TaskArea(data: data),
-              const SizedBox(height: 88),
+              const SizedBox(height: 88), // space for FAB
             ],
           ),
         ),
@@ -103,12 +75,12 @@ class HomePage extends ConsumerWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Header : landscape + creature
+// Header
 // ---------------------------------------------------------------------------
-class _CreatureHeader extends StatelessWidget {
+class HomeUireatureHeader extends StatelessWidget {
   final Dragon dragon;
 
-  const _CreatureHeader({required this.dragon});
+  const HomeUireatureHeader({required this.dragon});
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +101,7 @@ class _CreatureHeader extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Banner "Help your creature to grow!" + exp gauge
+// Banner
 // ---------------------------------------------------------------------------
 class _GrowBanner extends StatelessWidget {
   final Dragon dragon;
@@ -144,7 +116,7 @@ class _GrowBanner extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      color: _C.banner,
+      color: HomeUi.banner,
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,13 +163,13 @@ class _ExpBar extends StatelessWidget {
             FractionallySizedBox(
               alignment: Alignment.centerLeft,
               widthFactor: fraction,
-              child: Container(color: _C.amber),
+              child: Container(color: HomeUi.amber),
             ),
             Center(
               child: Text(
                 label,
                 style: const TextStyle(
-                  color: _C.banner,
+                  color: HomeUi.banner,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -210,7 +182,7 @@ class _ExpBar extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Tasks Area
+// Task Area
 // ---------------------------------------------------------------------------
 class _TaskArea extends StatelessWidget {
   final HomeData data;
@@ -220,20 +192,20 @@ class _TaskArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data.hasNoTasks) {
-      return const _CenteredMessage(
+      return const HomeUienteredMessage(
         emoji: '🥚',
-        title: 'No task for the moment',
+        title: 'Nothing to do for the moment',
         subtitle:
-            'Press the + button to create a task and help your companion to grow',
+            'Press on + to create your fist task and help your creature to grow.',
       );
     }
 
     final grouped = data.groupedTasks;
     if (grouped.isEmpty) {
-      return const _CenteredMessage(
+      return const HomeUienteredMessage(
         emoji: '🎉',
         title: 'All done!',
-        subtitle: 'Your tasks will reappear tomorrow. Great job!',
+        subtitle: 'Your tasks will spawn again tomorrow. Great job!',
       );
     }
 
@@ -242,7 +214,7 @@ class _TaskArea extends StatelessWidget {
       child: Column(
         children: [
           for (final entry in grouped.entries)
-            _CategorySection(category: entry.key, tasks: entry.value),
+            HomeUiategorySection(category: entry.key, tasks: entry.value),
         ],
       ),
     );
@@ -252,17 +224,17 @@ class _TaskArea extends StatelessWidget {
 // ---------------------------------------------------------------------------
 // Category Section
 // ---------------------------------------------------------------------------
-class _CategorySection extends StatefulWidget {
+class HomeUiategorySection extends StatefulWidget {
   final TaskCategory category;
   final List<Task> tasks;
 
-  const _CategorySection({required this.category, required this.tasks});
+  const HomeUiategorySection({required this.category, required this.tasks});
 
   @override
-  State<_CategorySection> createState() => _CategorySectionState();
+  State<HomeUiategorySection> createState() => HomeUiategorySectionState();
 }
 
-class _CategorySectionState extends State<_CategorySection> {
+class HomeUiategorySectionState extends State<HomeUiategorySection> {
   bool _expanded = true;
 
   @override
@@ -275,7 +247,7 @@ class _CategorySectionState extends State<_CategorySection> {
           child: Row(
             children: [
               Text(
-                _categoryLabel(widget.category),
+                categoryLabel(widget.category).toUpperCase(),
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
@@ -328,12 +300,12 @@ class _DismissibleTaskCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accent = _categoryColor(task.category);
+    final accent = CategoryColor(task.category);
     void complete() => ref.read(homeProvider.notifier).completeTask(task);
 
     return Dismissible(
       key: ValueKey(task.id),
-      direction: DismissDirection.endToStart, // swipe left
+      direction: DismissDirection.endToStart, // swipe vers la gauche
       onDismissed: (_) => complete(),
       background: Container(
         margin: const EdgeInsets.symmetric(vertical: 6),
@@ -367,7 +339,7 @@ class _TaskCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
-        color: _C.card,
+        color: HomeUi.card,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -381,6 +353,7 @@ class _TaskCard extends StatelessWidget {
         children: [
           const Icon(Icons.drag_indicator, color: Color(0xFFCFCFCF), size: 18),
           const SizedBox(width: 6),
+          // Pastille : emoji dérivé de la catégorie (plus de task.icon)
           Container(
             width: 40,
             height: 40,
@@ -389,29 +362,24 @@ class _TaskCard extends StatelessWidget {
               color: accent.withOpacity(0.22),
               shape: BoxShape.circle,
             ),
+            child: Text(
+              categoryEmoji(task.category),
+              style: const TextStyle(fontSize: 20),
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               task.title,
               style: const TextStyle(
-                color: _C.title,
+                color: HomeUi.title,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          const SizedBox(width: 8),
-          Text(
-            '1',
-            style: const TextStyle(
-              color: _C.expText,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(width: 3),
-          const Icon(Icons.bolt, color: _C.amber, size: 18),
           const SizedBox(width: 12),
+          // Case à cocher : tap = compléter (comme le swipe)
           GestureDetector(
             onTap: onComplete,
             child: Container(
@@ -435,12 +403,12 @@ class _TaskCard extends StatelessWidget {
 // ---------------------------------------------------------------------------
 // Centered Message
 // ---------------------------------------------------------------------------
-class _CenteredMessage extends StatelessWidget {
+class HomeUienteredMessage extends StatelessWidget {
   final String emoji;
   final String title;
   final String subtitle;
 
-  const _CenteredMessage({
+  const HomeUienteredMessage({
     required this.emoji,
     required this.title,
     required this.subtitle,

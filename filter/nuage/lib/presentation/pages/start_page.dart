@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nuage/presentation/controllers/onboarding_controller.dart';
+import 'package:nuage/core/dragon_repository_provider.dart';
 import 'package:nuage/presentation/pages/home_page.dart';
 import 'package:nuage/presentation/pages/onboarding_page.dart';
-import 'package:nuage/presentation/themes/app_colors.dart';
+import 'package:nuage/presentation/themes/start_ui.dart';
 import 'package:nuage/presentation/widgets/dragon_avatar.dart';
 
 class StartPage extends ConsumerWidget {
   const StartPage({super.key});
 
   Future<void> _onStartPressed(BuildContext context, WidgetRef ref) async {
-    final repo = ref.read(onboardingRepositoryProvider);
-    final hasCompleted = await repo.hasCompletedOnboarding();
+    final hasDragon = await ref.read(dragonRepositoryProvider).hasDragon();
 
     if (!context.mounted) return;
 
-    if (hasCompleted) {
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const HomePage()),
-      );
+    if (!context.mounted) return;
+    if (hasDragon) {
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const HomePage()));
     } else {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const OnboardingPage()),
-      );
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const OnboardingPage()));
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: AppColors.launchBackground,
+      backgroundColor: StartUi.launchBackground,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -41,7 +41,7 @@ class StartPage extends ConsumerWidget {
               const Text(
                 'Nuage',
                 style: TextStyle(
-                  color: AppColors.startTitleText,
+                  color: StartUi.startTitleText,
                   fontSize: 52,
                   fontWeight: FontWeight.bold,
                 ),
@@ -49,7 +49,10 @@ class StartPage extends ConsumerWidget {
               const SizedBox(height: 8),
               const Text(
                 'Your self-care companions',
-                style: TextStyle(color: AppColors.startSubtitleText, fontSize: 18),
+                style: TextStyle(
+                  color: StartUi.startSubtitleText,
+                  fontSize: 18,
+                ),
               ),
               const Spacer(flex: 4),
               SizedBox(
@@ -57,8 +60,8 @@ class StartPage extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () => _onStartPressed(context, ref),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.startButtonBackground,
-                    foregroundColor: AppColors.startButtonText,
+                    backgroundColor: StartUi.startButtonBackground,
+                    foregroundColor: StartUi.startButtonText,
                     minimumSize: const Size.fromHeight(60),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -76,7 +79,7 @@ class StartPage extends ConsumerWidget {
               const Text(
                 'By using the app, you agree to the\nTerms of Service and Privacy Policy',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.startFooterText, fontSize: 13),
+                style: TextStyle(color: StartUi.startFooterText, fontSize: 13),
               ),
               const SizedBox(height: 16),
             ],
