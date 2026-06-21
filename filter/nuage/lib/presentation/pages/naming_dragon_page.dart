@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:nuage/core/app_images.dart';
 import 'package:nuage/presentation/themes/level_up_ui.dart';
+import 'package:nuage/presentation/widgets/pill_button_widget.dart';
 
 class NamingDragonPage extends StatefulWidget {
   final void Function(String name) onSubmit;
@@ -13,7 +14,7 @@ class NamingDragonPage extends StatefulWidget {
   State<NamingDragonPage> createState() => _NameDragonPageState();
 }
 
-class _NameDragonPageState extends State<NamingDragonPage> {  // TODO notifier ajout nom
+class _NameDragonPageState extends State<NamingDragonPage> {
   static const _randomNames = [
     'Téméraire',
     'Smaug',
@@ -36,8 +37,6 @@ class _NameDragonPageState extends State<NamingDragonPage> {  // TODO notifier a
   }
 
   bool get _canSubmit => _controller.text.trim().isNotEmpty;
-
-  
 
   void _pickRandom() {
     final name = _randomNames[_random.nextInt(_randomNames.length)];
@@ -73,22 +72,14 @@ class _NameDragonPageState extends State<NamingDragonPage> {  // TODO notifier a
               ),
               const Spacer(flex: 2),
 
-
               SizedBox(
                 height: 240,
                 child: Stack(
                   clipBehavior: Clip.none,
                   alignment: Alignment.center,
                   children: [
-                    Image.asset(
-                      AppImages.dragon.baby,
-                      height: 220,
-                    ),
-                    const Positioned(
-                      top: 4,
-                      right: 70,
-                      child: _HeartBubble(),
-                    ),
+                    Image.asset(AppImages.dragon.baby, height: 220),
+                    const Positioned(top: 4, right: 70, child: _HeartBubble()),
                   ],
                 ),
               ),
@@ -123,18 +114,13 @@ class _NameDragonPageState extends State<NamingDragonPage> {  // TODO notifier a
               Row(
                 children: [
                   Expanded(
-                    child: _PillButton(
-                      label: 'Random',
-                      background: LevelUpUi.secondaryButton,
-                      onPressed: _pickRandom,
-                    ),
+                    child: PillButton(label: 'Random', background: LevelUpUi.secondaryButton, onPressed: _pickRandom),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: _PillButton(
+                    child: PillButton(
                       label: 'Next',
-                      background: LevelUpUi.primaryButton,
-                      onPressed: _canSubmit ? _submit : null, // null = disabled
+                      onPressed: _canSubmit ? _submit : null,
                     ),
                   ),
                 ],
@@ -144,38 +130,6 @@ class _NameDragonPageState extends State<NamingDragonPage> {  // TODO notifier a
           ),
         ),
       ),
-    );
-  }
-}
-
-class _PillButton extends StatelessWidget {
-  final String label;
-  final Color background;
-  final VoidCallback? onPressed;
-
-  const _PillButton({
-    required this.label,
-    required this.background,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: background,
-        foregroundColor: Colors.white,
-        disabledBackgroundColor: const Color(0xFF8E9AD8),
-        disabledForegroundColor: Colors.white70,
-        minimumSize: const Size.fromHeight(60),
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      ),
-      child: Text(label),
     );
   }
 }
@@ -194,11 +148,7 @@ class _HeartBubble extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(14),
           ),
-          child: const Icon(
-            Icons.favorite,
-            color: Color(0xFFE53935),
-            size: 22,
-          ),
+          child: const Icon(Icons.favorite, color: Color(0xFFE53935), size: 22),
         ),
         SizedBox(
           width: 16,

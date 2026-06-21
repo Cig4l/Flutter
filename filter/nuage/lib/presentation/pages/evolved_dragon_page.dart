@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nuage/domain/entities/dragon.dart';
 import 'package:nuage/presentation/themes/level_up_ui.dart';
 import 'package:nuage/presentation/stage/dragon_stage.dart';
+import 'package:nuage/presentation/widgets/pill_button_widget.dart';
 
 class EvolvedDragonPage extends StatelessWidget {
   final Dragon dragon;
@@ -44,23 +45,7 @@ class EvolvedDragonPage extends StatelessWidget {
 
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: onBackToHome,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: LevelUpUi.primaryButton,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size.fromHeight(60),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: const Text('Go home with them'),
-                ),
+                child: PillButton( label: 'Go home with them', onPressed: onBackToHome),
               ),
               const SizedBox(height: 24),
             ],

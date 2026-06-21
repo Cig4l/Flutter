@@ -3,17 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:nuage/core/app_images.dart';
 import 'package:nuage/presentation/themes/level_up_ui.dart';
+import 'package:nuage/presentation/widgets/pill_button_widget.dart';
 
 class HatchingDragonPage extends StatefulWidget {
-  final VoidCallback? onHatched;  // next => meet the baby dragon
+  final VoidCallback? onHatched; // next => meet the baby dragon
 
   final int tapsToHatch;
 
-  const HatchingDragonPage({
-    super.key,
-    this.onHatched,
-    this.tapsToHatch = 3,
-  });
+  const HatchingDragonPage({super.key, this.onHatched, this.tapsToHatch = 3});
 
   @override
   State<HatchingDragonPage> createState() => _HatchingPageState();
@@ -21,7 +18,6 @@ class HatchingDragonPage extends StatefulWidget {
 
 class _HatchingPageState extends State<HatchingDragonPage>
     with SingleTickerProviderStateMixin {
-
   late final AnimationController _shake;
   int _taps = 0;
   bool _hatched = false;
@@ -85,10 +81,7 @@ class _HatchingPageState extends State<HatchingDragonPage>
                         sin(_shake.value * pi * 4) * (1 - _shake.value) * 0.12;
                     return Transform.rotate(angle: angle, child: child);
                   },
-                  child: Image.asset(
-                    AppImages.crackedEgg,
-                    height: 240,
-                  ),
+                  child: Image.asset(AppImages.crackedEgg, height: 240),
                 ),
               ),
 
@@ -96,23 +89,7 @@ class _HatchingPageState extends State<HatchingDragonPage>
 
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _help,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: LevelUpUi.primaryButton,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size.fromHeight(60),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: const Text('Tap to help it'),
-                ),
+                child: PillButton(label: 'Tap to help it', onPressed: _help),
               ),
               const SizedBox(height: 24),
             ],

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nuage/presentation/themes/level_up_ui.dart';
+import 'package:nuage/presentation/widgets/pill_button_widget.dart';
 
 class EvolvingDragonPage extends StatelessWidget {
-  final VoidCallback onContinue;  
+  final VoidCallback onContinue;
 
   const EvolvingDragonPage({super.key, required this.onContinue});
 
@@ -48,23 +49,7 @@ class EvolvingDragonPage extends StatelessWidget {
 
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: onContinue,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: LevelUpUi.primaryButton,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size.fromHeight(60),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: const Text('Next'),
-                ),
+                child: PillButton(label: 'Next', onPressed: onContinue),
               ),
               const SizedBox(height: 24),
             ],

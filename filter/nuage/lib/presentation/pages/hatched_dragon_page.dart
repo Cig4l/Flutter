@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nuage/core/app_images.dart';
 import 'package:nuage/presentation/themes/level_up_ui.dart';
+import 'package:nuage/presentation/widgets/pill_button_widget.dart';
 
 class HatchedDragonPage extends StatelessWidget {
   final VoidCallback onGreet;
@@ -35,23 +36,7 @@ class HatchedDragonPage extends StatelessWidget {
 
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: onGreet,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: LevelUpUi.primaryButton,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size.fromHeight(60),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: const Text('Greet them'),
-                ),
+                child: PillButton(label: 'Greet them', onPressed: onGreet),
               ),
               const SizedBox(height: 24),
             ],

@@ -15,13 +15,11 @@ class TaskRepositoryImpl implements TaskRepository {
     return rows.map(TaskMapper.fromJson).toList(); 
   }
 
-  // TODO : task not created if task with this title already exists + error message
   @override
   Future<void> addTask(Task task) async {
     await _client.from(_table).insert(TaskMapper.toJson(task)); 
   }
 
-  // TODO : task not updated if task with this title already exists + error message
   @override
   Future<void> updateTask(Task task) async {
     await _client
