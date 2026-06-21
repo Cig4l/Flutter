@@ -24,7 +24,7 @@ class Dragon {
 
   Dragon gainExp() {
     if(currentExp +1 < level.maxExp) {
-      return copyWith(currentExp: this.currentExp + 1);
+      return copyWith(currentExp: currentExp + 1);
     }
     return copyWith(currentExp: 0, level: level.next());
   }

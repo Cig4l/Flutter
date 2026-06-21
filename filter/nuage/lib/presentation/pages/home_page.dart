@@ -57,7 +57,7 @@ class HomePage extends ConsumerWidget {
       body: homeAsync.when(
         loading: () =>
             const Center(child: CircularProgressIndicator(color: Colors.white)),
-        error: (_, __) => const HomeUienteredMessage(
+        error: (_, _) => const HomeUienteredMessage(
           emoji: '😵',
           title: 'Impossible to load your creature',
           subtitle: 'Check your connection and try again.',
@@ -83,7 +83,7 @@ class HomePage extends ConsumerWidget {
 class HomeUireatureHeader extends StatelessWidget {
   final Dragon dragon;
 
-  const HomeUireatureHeader({required this.dragon});
+  const HomeUireatureHeader({super.key, required this.dragon});
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +229,7 @@ class HomeUiategorySection extends StatefulWidget {
   final TaskCategory category;
   final List<Task> tasks;
 
-  const HomeUiategorySection({required this.category, required this.tasks});
+  const HomeUiategorySection({super.key, required this.category, required this.tasks});
 
   @override
   State<HomeUiategorySection> createState() => HomeUiategorySectionState();
@@ -259,7 +259,7 @@ class HomeUiategorySectionState extends State<HomeUiategorySection> {
               Expanded(
                 child: Container(
                   height: 2,
-                  color: Colors.white.withOpacity(0.45),
+                  color: Colors.white.withValues(alpha: 0.45),
                 ),
               ),
               const SizedBox(width: 12),
@@ -269,7 +269,7 @@ class HomeUiategorySectionState extends State<HomeUiategorySection> {
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.25),
+                    color: Colors.white.withValues(alpha: 0.25),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -381,7 +381,7 @@ class _TaskCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -397,7 +397,7 @@ class _TaskCard extends StatelessWidget {
             height: 40,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: accent.withOpacity(0.22),
+              color: accent.withValues(alpha: 0.22),
               shape: BoxShape.circle,
             ),
             child: Text(
@@ -424,7 +424,7 @@ class _TaskCard extends StatelessWidget {
               height: 34,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: accent.withOpacity(0.16),
+                color: accent.withValues(alpha: 0.16),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: accent, width: 2),
               ),
@@ -445,7 +445,7 @@ class HomeUienteredMessage extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  const HomeUienteredMessage({
+  const HomeUienteredMessage({super.key, 
     required this.emoji,
     required this.title,
     required this.subtitle,
@@ -476,7 +476,7 @@ class HomeUienteredMessage extends StatelessWidget {
             subtitle,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
               fontSize: 14,
               height: 1.4,
             ),
