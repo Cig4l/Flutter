@@ -11,6 +11,8 @@ import 'package:nuage/presentation/pages/update_task_page.dart';
 import 'package:nuage/presentation/themes/home_ui.dart';
 import 'package:nuage/presentation/themes/task_category_ui.dart';
 
+// TODO Widget Button Blue
+
 // ---------------------------------------------------------------------------
 // Dragon Assets
 // ---------------------------------------------------------------------------
@@ -330,7 +332,7 @@ class _DismissibleTaskCard extends ConsumerWidget {
 
     return Dismissible(
       key: ValueKey(task.id),
-      direction: DismissDirection.endToStart, // swipe vers la gauche
+      direction: DismissDirection.endToStart, // swipe left
       onDismissed: (_) => complete(),
       background: Container(
         margin: const EdgeInsets.symmetric(vertical: 6),
@@ -413,7 +415,6 @@ class _TaskCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.drag_indicator, color: Color(0xFFCFCFCF), size: 18),
           const SizedBox(width: 6),
           Container(
             width: 40,

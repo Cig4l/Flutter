@@ -27,15 +27,27 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
     super.dispose();
   }
 
+  bool _isDuplicate(String title, List tasks) {
+    final name = title.trim().toLowerCase();
+    return name.isNotEmpty &&
+        tasks.any((t) => t.title.trim().toLowerCase() == name);
+  }
+
   void _create() {
     final title = _titleController.text.trim();
     if (title.isEmpty) return;
+
+    final tasks = ref.read(homeProvider).value?.tasks ?? const [];
+    if (_isDuplicate(title, tasks)) return;
+
     ref.read(homeProvider.notifier).addTask(title: title, category: _selected);
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
+    final tasks = ref.watch(homeProvider).value?.tasks ?? const [];
+
     return DraggableScrollableSheet(
       initialChildSize: 0.85,
       minChildSize: 0.5,
@@ -51,7 +63,6 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // En-tête : titre + bouton fermer
               Row(
                 children: [
                   const Text(
@@ -83,7 +94,6 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
               ),
               const SizedBox(height: 24),
 
-              // Champ "Enter a new goal..."
               TextField(
                 controller: _titleController,
                 textInputAction: TextInputAction.done,
@@ -103,6 +113,22 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
                   ),
                 ),
               ),
+
+              ValueListenableBuilder<TextEditingValue>(
+                valueListenable: _titleController,
+                builder: (context, value, _) {
+                  if (!_isDuplicate(value.text, tasks)) {
+                    return const SizedBox.shrink();
+                  }
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text(
+                      'A task with this name already exists',
+                      style: TextStyle(color: Colors.red, fontSize: 13),
+                    ),
+                  );
+                },
+              ),
               const SizedBox(height: 24),
 
               const Text(
@@ -115,7 +141,6 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
               ),
               const SizedBox(height: 12),
 
-              // Liste des catégories (construite à partir de l'enum)
               Expanded(
                 child: ListView(
                   controller: scrollController,
@@ -134,7 +159,9 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
               ValueListenableBuilder<TextEditingValue>(
                 valueListenable: _titleController,
                 builder: (context, value, _) {
-                  final canSave = value.text.trim().isNotEmpty;
+                  final title = value.text.trim();
+                  final canSave =
+                      title.isNotEmpty && !_isDuplicate(title, tasks);
 
                   return SizedBox(
                     width: double.infinity,

@@ -23,7 +23,6 @@ class _EditTaskPageState extends ConsumerState<UpdateTaskPage> {
   @override
   void initState() {
     super.initState();
-    // Pré-remplissage avec les valeurs actuelles de la tâche.
     _titleController = TextEditingController(text: widget.task.title);
     _selected = widget.task.category;
   }
@@ -34,11 +33,21 @@ class _EditTaskPageState extends ConsumerState<UpdateTaskPage> {
     super.dispose();
   }
 
+  bool _isDuplicate(String title, List<Task> tasks) {
+    final name = title.trim().toLowerCase();
+    if (name.isEmpty) return false;
+    return tasks.any(
+      (t) => t.id != widget.task.id && t.title.trim().toLowerCase() == name,
+    );
+  }
+
   void _save() {
     final title = _titleController.text.trim();
     if (title.isEmpty) return;
 
-    // On conserve l'id et l'état "fait" ; on ne change que titre + catégorie.
+    final tasks = ref.read(homeProvider).value?.tasks ?? const <Task>[];
+    if (_isDuplicate(title, tasks)) return;
+
     final updated = Task(
       id: widget.task.id,
       title: title,
@@ -51,6 +60,8 @@ class _EditTaskPageState extends ConsumerState<UpdateTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    final tasks = ref.watch(homeProvider).value?.tasks ?? const <Task>[];
+
     return DraggableScrollableSheet(
       initialChildSize: 0.85,
       minChildSize: 0.5,
@@ -66,7 +77,7 @@ class _EditTaskPageState extends ConsumerState<UpdateTaskPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // En-tête
+              // Header
               Row(
                 children: [
                   const Text(
@@ -95,7 +106,6 @@ class _EditTaskPageState extends ConsumerState<UpdateTaskPage> {
               ),
               const SizedBox(height: 24),
 
-              // Champ titre (pré-rempli)
               TextField(
                 controller: _titleController,
                 textInputAction: TextInputAction.done,
@@ -113,6 +123,22 @@ class _EditTaskPageState extends ConsumerState<UpdateTaskPage> {
                   ),
                 ),
               ),
+
+              ValueListenableBuilder<TextEditingValue>(
+                valueListenable: _titleController,
+                builder: (context, value, _) {
+                  if (!_isDuplicate(value.text, tasks)) {
+                    return const SizedBox.shrink();
+                  }
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text(
+                      'A task with this name already exists',
+                      style: TextStyle(color: Colors.red, fontSize: 13),
+                    ),
+                  );
+                },
+              ),
               const SizedBox(height: 24),
 
               const Text(
@@ -125,7 +151,6 @@ class _EditTaskPageState extends ConsumerState<UpdateTaskPage> {
               ),
               const SizedBox(height: 12),
 
-              // Liste des catégories (la catégorie actuelle est présélectionnée)
               Expanded(
                 child: ListView(
                   controller: scrollController,
@@ -141,11 +166,12 @@ class _EditTaskPageState extends ConsumerState<UpdateTaskPage> {
               ),
               const SizedBox(height: 12),
 
-              // Bouton Save (désactivé si le titre est vide)
               ValueListenableBuilder<TextEditingValue>(
                 valueListenable: _titleController,
                 builder: (context, value, _) {
-                  final canSave = value.text.trim().isNotEmpty;
+                  final title = value.text.trim();
+                  final canSave =
+                      title.isNotEmpty && !_isDuplicate(title, tasks);
                   return SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
