@@ -38,7 +38,7 @@ class OnboardingPage extends ConsumerWidget {
                         const Text(
                           'Hello, adventurer! 🐉',
                           style: TextStyle(
-                            color: StartUi.startTitleText,
+                            color: StartUi.titleText,
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
@@ -49,7 +49,7 @@ class OnboardingPage extends ConsumerWidget {
                           'tasks to nurture the creature growing inside, and '
                           'soon it will hatch into your very own companion.',
                           style: TextStyle(
-                            color: StartUi.startSubtitleText,
+                            color: StartUi.subtitleText,
                             fontSize: 17,
                             height: 1.5,
                           ),
@@ -71,8 +71,8 @@ class OnboardingPage extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () => _onStartPressed(context, ref),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: StartUi.startButtonBackground,
-                    foregroundColor: StartUi.startButtonText,
+                    backgroundColor: StartUi.buttonBackground,
+                    foregroundColor: StartUi.buttonText,
                     minimumSize: const Size.fromHeight(60),
                     elevation: 0,
                     shape: RoundedRectangleBorder(

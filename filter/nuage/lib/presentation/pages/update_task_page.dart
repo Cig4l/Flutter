@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:nuage/domain/entities/task.dart';
 import 'package:nuage/domain/entities/task_category.dart';
 import 'package:nuage/presentation/pages/home_notifier.dart';
 import 'package:nuage/presentation/themes/create_task_ui.dart';
 import 'package:nuage/presentation/themes/task_category_ui.dart';
 
-class CreateTaskPage extends ConsumerStatefulWidget {
-  const CreateTaskPage({super.key});
+class UpdateTaskPage extends ConsumerStatefulWidget {
+  final Task task;
+
+  const UpdateTaskPage({super.key, required this.task});
 
   @override
-  ConsumerState<CreateTaskPage> createState() => _CreateTaskSheetState();
+  ConsumerState<UpdateTaskPage> createState() => _EditTaskPageState();
 }
 
-class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
-  final _titleController = TextEditingController();
+class _EditTaskPageState extends ConsumerState<UpdateTaskPage> {
+  late final TextEditingController _titleController;
+  late TaskCategory _selected;
 
-  late TaskCategory _selected = TaskCategory.values.firstWhere(
-    (category) => category.name == 'unknown',
-    orElse: () => TaskCategory.values.first,
-  );
+  @override
+  void initState() {
+    super.initState();
+    // Pré-remplissage avec les valeurs actuelles de la tâche.
+    _titleController = TextEditingController(text: widget.task.title);
+    _selected = widget.task.category;
+  }
 
   @override
   void dispose() {
@@ -27,10 +34,18 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
     super.dispose();
   }
 
-  void _create() {
+  void _save() {
     final title = _titleController.text.trim();
     if (title.isEmpty) return;
-    ref.read(homeProvider.notifier).addTask(title: title, category: _selected);
+
+    // On conserve l'id et l'état "fait" ; on ne change que titre + catégorie.
+    final updated = Task(
+      id: widget.task.id,
+      title: title,
+      category: _selected,
+      completedAt: widget.task.completedAt,
+    );
+    ref.read(homeProvider.notifier).updateTask(updated);
     Navigator.of(context).pop();
   }
 
@@ -51,11 +66,11 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // En-tête : titre + bouton fermer
+              // En-tête
               Row(
                 children: [
                   const Text(
-                    'Create A Task',
+                    'Edit A Task',
                     style: TextStyle(
                       color: CreateTaskUi.title,
                       fontSize: 24,
@@ -72,31 +87,26 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
                         color: CreateTaskUi.pink,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                        size: 22,
-                      ),
+                      child: const Icon(Icons.close,
+                          color: Colors.white, size: 22),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 24),
 
-              // Champ "Enter a new goal..."
+              // Champ titre (pré-rempli)
               TextField(
                 controller: _titleController,
                 textInputAction: TextInputAction.done,
-                onSubmitted: (_) => _create(),
+                onSubmitted: (_) => _save(),
                 decoration: InputDecoration(
                   hintText: 'Enter a new goal...',
                   hintStyle: const TextStyle(color: CreateTaskUi.hint),
                   filled: true,
                   fillColor: CreateTaskUi.card,
                   contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 18,
-                  ),
+                      horizontal: 20, vertical: 18),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14),
                     borderSide: BorderSide.none,
@@ -115,7 +125,7 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
               ),
               const SizedBox(height: 12),
 
-              // Liste des catégories (construite à partir de l'enum)
+              // Liste des catégories (la catégorie actuelle est présélectionnée)
               Expanded(
                 child: ListView(
                   controller: scrollController,
@@ -131,17 +141,15 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
               ),
               const SizedBox(height: 12),
 
+              // Bouton Save (désactivé si le titre est vide)
               ValueListenableBuilder<TextEditingValue>(
                 valueListenable: _titleController,
                 builder: (context, value, _) {
                   final canSave = value.text.trim().isNotEmpty;
-
                   return SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: canSave
-                          ? _create
-                          : null, // null = disabled button
+                      onPressed: canSave ? _save : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: CreateTaskUi.pink,
                         foregroundColor: Colors.white,
@@ -157,7 +165,7 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      child: const Text('Create task'),
+                      child: const Text('Save'),
                     ),
                   );
                 },
@@ -206,10 +214,8 @@ class _CategoryTile extends StatelessWidget {
                 color: CreateTaskUi.categoryCircleColor,
                 shape: BoxShape.circle,
               ),
-              child: Text(
-                TaskCategoryUi.categoryEmoji(category),
-                style: const TextStyle(fontSize: 20),
-              ),
+              child: Text(TaskCategoryUi.categoryEmoji(category),
+                  style: const TextStyle(fontSize: 20)),
             ),
             const SizedBox(width: 14),
             Expanded(

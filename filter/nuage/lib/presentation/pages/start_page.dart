@@ -41,7 +41,7 @@ class StartPage extends ConsumerWidget {
               const Text(
                 'Nuage',
                 style: TextStyle(
-                  color: StartUi.startTitleText,
+                  color: StartUi.titleText,
                   fontSize: 52,
                   fontWeight: FontWeight.bold,
                 ),
@@ -50,7 +50,7 @@ class StartPage extends ConsumerWidget {
               const Text(
                 'Your self-care companions',
                 style: TextStyle(
-                  color: StartUi.startSubtitleText,
+                  color: StartUi.subtitleText,
                   fontSize: 18,
                 ),
               ),
@@ -60,8 +60,8 @@ class StartPage extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () => _onStartPressed(context, ref),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: StartUi.startButtonBackground,
-                    foregroundColor: StartUi.startButtonText,
+                    backgroundColor: StartUi.buttonBackground,
+                    foregroundColor: StartUi.buttonText,
                     minimumSize: const Size.fromHeight(60),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -79,7 +79,7 @@ class StartPage extends ConsumerWidget {
               const Text(
                 'By using the app, you agree to the\nTerms of Service and Privacy Policy',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: StartUi.startFooterText, fontSize: 13),
+                style: TextStyle(color: StartUi.footerText, fontSize: 13),
               ),
               const SizedBox(height: 16),
             ],

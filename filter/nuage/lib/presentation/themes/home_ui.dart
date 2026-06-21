@@ -9,12 +9,4 @@ class HomeUi {
   static const title = Color(0xFF3D2B22);
   static const amber = Color(0xFFFFC23C);
   static const fab = Color(0xFF4CAF50);
-
-  static const categoryPalette = [
-    Color(0xFFF48FB1),
-    Color(0xFF5B9BD5),
-    Color(0xFF81C784),
-    Color(0xFFFFB74D),
-    Color(0xFFBA68C8),
-  ];
 }

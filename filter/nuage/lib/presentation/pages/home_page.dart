@@ -6,6 +6,7 @@ import 'package:nuage/domain/entities/task.dart';
 import 'package:nuage/domain/entities/task_category.dart';
 import 'package:nuage/presentation/pages/create_task_page.dart';
 import 'package:nuage/presentation/pages/home_notifier.dart';
+import 'package:nuage/presentation/pages/update_task_page.dart';
 import 'package:nuage/presentation/themes/home_ui.dart';
 import 'package:nuage/presentation/themes/task_category_ui.dart';
 
@@ -17,16 +18,18 @@ String _backgroundAsset(Dragon dragon) {
     case 0:
       return 'assets/images/dragon/egg-bg.jpg';
     case 1:
-      return 'assets/creatures/baby-bg.jpg';
+      return 'assets/dragon/baby-bg.jpg';
     case 2:
-      return 'assets/creatures/adult-bg.jpg';
+      return 'assets/dragon/teen-bg.jpg';
+    case 3:
+      return 'assets/dragon/adult-bg.jpg';
     default:
       return 'assets/images/dragon/egg-bg.jpg';
   }
 }
 
 Color CategoryColor(TaskCategory c) =>
-    HomeUi.categoryPalette[c.index % HomeUi.categoryPalette.length];
+    TaskCategoryUi.categoryPalette[c.index % TaskCategoryUi.categoryPalette.length];
 
 // ---------------------------------------------------------------------------
 // Page
@@ -91,9 +94,7 @@ class HomeUireatureHeader extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Image.asset(_backgroundAsset(dragon), fit: BoxFit.cover),
-          Align(
-            alignment: const Alignment(0, 0.55),
-          ),
+          Align(alignment: const Alignment(0, 0.55)),
         ],
       ),
     );
@@ -247,7 +248,7 @@ class HomeUiategorySectionState extends State<HomeUiategorySection> {
           child: Row(
             children: [
               Text(
-                categoryLabel(widget.category).toUpperCase(),
+                TaskCategoryUi.categoryLabel(widget.category).toUpperCase(),
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
@@ -317,7 +318,44 @@ class _DismissibleTaskCard extends ConsumerWidget {
         ),
         child: const Icon(Icons.check_rounded, color: Colors.white, size: 28),
       ),
-      child: _TaskCard(task: task, accent: accent, onComplete: complete),
+      child: GestureDetector(
+        onLongPress: () => _showTaskOptions(context, ref),
+        child: _TaskCard(task: task, accent: accent, onComplete: complete),
+      ),
+    );
+  }
+
+  void _showTaskOptions(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.edit_outlined),
+              title: const Text('Edit'),
+              onTap: () {
+                Navigator.of(sheetContext).pop(); // closes menu
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (_) => UpdateTaskPage(task: task),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline, color: Colors.red),
+              title: const Text('Delete', style: TextStyle(color: Colors.red)),
+              onTap: () {
+                Navigator.of(sheetContext).pop();
+                ref.read(homeProvider.notifier).deleteTask(task);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -363,7 +401,7 @@ class _TaskCard extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: Text(
-              categoryEmoji(task.category),
+              TaskCategoryUi.categoryEmoji(task.category),
               style: const TextStyle(fontSize: 20),
             ),
           ),
@@ -379,7 +417,6 @@ class _TaskCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          // Case à cocher : tap = compléter (comme le swipe)
           GestureDetector(
             onTap: onComplete,
             child: Container(

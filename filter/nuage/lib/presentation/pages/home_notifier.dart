@@ -43,6 +43,28 @@ class HomeNotifier extends AsyncNotifier<HomeData> {
     return HomeData(dragon: dragon, tasks: tasks);
   }
 
+  Future<void> deleteTask(Task task) async {
+    final current = state.value;
+    if (current == null) return;
+
+    final updated = current.tasks.where((t) => t.id != task.id).toList();
+    state = AsyncData(current.copyWith(tasks: updated));
+
+    await ref.read(taskRepositoryProvider).deleteTask(task.id);
+  }
+
+  Future<void> updateTask(Task updated) async {
+    final current = state.value;
+    if (current == null) return;
+
+    final tasks = current.tasks
+        .map((t) => t.id == updated.id ? updated : t)
+        .toList();
+    state = AsyncData(current.copyWith(tasks: tasks));
+
+    await ref.read(taskRepositoryProvider).updateTask(updated);
+  }
+
   Future<void> addTask({
     required String title,
     required TaskCategory category,

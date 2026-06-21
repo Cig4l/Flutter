@@ -1,7 +1,8 @@
 enum Level {
-  one(level: 1, maxExp: 5),
-  two(level: 2, maxExp: 7),
-  three(level: 3, maxExp: 31);
+  one(level: 1, maxExp: 1),
+  two(level: 2, maxExp: 10),
+  three(level: 3, maxExp: 100),
+  four(level: 4, maxExp: 1000);
 
   const Level({required this.level, required this.maxExp});
   final int level;
@@ -11,7 +12,8 @@ enum Level {
     switch(this) {
       case one: return two;
       case two: return three;
-      case three: return three;   // TODO : no more gauge once level 3 completed
+      case three: return three;
+      case four: return four;
     }
   }
 }

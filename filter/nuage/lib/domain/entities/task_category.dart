@@ -1,13 +1,14 @@
 enum TaskCategory {
   unknown,
+  productivity,
   calm,
-  selfKindness,
-  hygiene,
-  work,
-  connection,
-  pets,
-  housework,
-  nutrition,
   sleep,
+  selfKindness,
+  gratitude,
+  nutrition,
+  connection,
+  hygiene,
+  housework,
+  pets, 
   sports
 }
