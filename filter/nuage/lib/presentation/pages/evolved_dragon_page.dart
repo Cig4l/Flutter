@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nuage/core/app_images.dart';
 import 'package:nuage/domain/entities/dragon.dart';
-import 'package:nuage/domain/entities/level.dart';
 import 'package:nuage/presentation/themes/level_up_ui.dart';
+import 'package:nuage/presentation/stage/dragon_stage.dart';
 
 class EvolvedDragonPage extends StatelessWidget {
   final Dragon dragon;
@@ -13,21 +12,6 @@ class EvolvedDragonPage extends StatelessWidget {
     required this.dragon,
     required this.onBackToHome,
   });
-
-  String _dragonAsset(Level level) {
-  switch (level.index) {
-    case 0:
-      return AppImages.dragon.egg;
-    case 1:
-      return AppImages.dragon.baby;
-    case 2:
-      return AppImages.dragon.teen;
-    case 3:
-      return AppImages.dragon.adult;
-    default:
-      return AppImages.dragon.egg;
-  }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +35,10 @@ class EvolvedDragonPage extends StatelessWidget {
               ),
               Expanded(
                 child: Center(
-                  child: Image.asset(_dragonAsset(dragon.level), fit: BoxFit.contain),
+                  child: Image.asset(
+                    dragon.stage.dragonAsset,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
 
@@ -73,7 +60,6 @@ class EvolvedDragonPage extends StatelessWidget {
                     ),
                   ),
                   child: const Text('Go home with them'),
-                  
                 ),
               ),
               const SizedBox(height: 24),

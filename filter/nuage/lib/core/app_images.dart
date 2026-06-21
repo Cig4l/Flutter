@@ -1,12 +1,12 @@
 abstract final class AppImages {
   AppImages._();
 
-  static const base = 'assets/images';
+  static const base = 'assets/images/dragon';
 
   static const dragon = _Dragon();
   static const backgrounds = _Backgrounds();
 
-  static const avatar = '$base/dragon/dragon-avatar.jpg';
+  static const avatar = '$base/dragon-avatar.jpg';
   static const crackedEgg = '$base/cracked-egg.png';
 }
 

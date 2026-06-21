@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nuage/domain/entities/dragon.dart';
-import 'package:nuage/domain/entities/level.dart';
 import 'package:nuage/presentation/pages/evolved_dragon_page.dart';
 import 'package:nuage/presentation/pages/evolving_dragon_page.dart';
 import 'package:nuage/presentation/pages/hatched_dragon_page.dart';
 import 'package:nuage/presentation/pages/hatching_page.dart';
 import 'package:nuage/presentation/pages/naming_dragon_page.dart';
+import 'package:nuage/presentation/stage/dragon_stage.dart';
 
 void showLevelUpFlow(
   BuildContext context, {
@@ -13,7 +13,7 @@ void showLevelUpFlow(
   required Dragon to,
   required void Function(String name) onRename, // callback name
 }) {
-  final isHatching = from.level == Level.one;
+  final isHatching = from.stage.isHatching;
   final intro = isHatching
       ? HatchingDragonPage(onHatched: () => _showHatchedDragon(context, onRename))
       : EvolvingDragonPage(onContinue: () => _showEvolvedDragon(context, to));

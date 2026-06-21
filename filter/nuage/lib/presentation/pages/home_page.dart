@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nuage/core/app_images.dart';
 
 import 'package:nuage/domain/entities/dragon.dart';
 import 'package:nuage/domain/entities/task.dart';
@@ -11,26 +10,13 @@ import 'package:nuage/presentation/pages/home_notifier.dart';
 import 'package:nuage/presentation/pages/update_task_page.dart';
 import 'package:nuage/presentation/themes/home_ui.dart';
 import 'package:nuage/presentation/themes/task_category_ui.dart';
+import 'package:nuage/presentation/stage/dragon_stage.dart';
 
 // TODO Widget Button Blue
 
 // ---------------------------------------------------------------------------
 // Dragon Assets
 // ---------------------------------------------------------------------------
-String _backgroundAsset(Dragon dragon) {
-  switch (dragon.level.index) {
-    case 0:
-      return AppImages.backgrounds.egg;
-    case 1:
-      return AppImages.backgrounds.baby;
-    case 2:
-      return AppImages.backgrounds.teen;
-    case 3:
-      return AppImages.backgrounds.adult;
-    default:
-      return AppImages.backgrounds.egg;
-  }
-}
 
 Color CategoryColor(TaskCategory c) =>
     TaskCategoryUi.categoryPalette[c.index %
@@ -116,7 +102,7 @@ class CreatureHeader extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(_backgroundAsset(dragon), fit: BoxFit.cover),
+          Image.asset(dragon.stage.backgroundAsset, fit: BoxFit.cover),
           Align(alignment: const Alignment(0, 0.55)),
         ],
       ),
