@@ -145,8 +145,12 @@ class _CreateTaskSheetState extends ConsumerState<CreateTaskPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: CreateTaskUi.pink,
                         foregroundColor: Colors.white,
-                        disabledBackgroundColor: CreateTaskUi.pink.withValues(alpha: 0.4),
-                        disabledForegroundColor: Colors.white.withValues(alpha: 0.7),
+                        disabledBackgroundColor: CreateTaskUi.pink.withValues(
+                          alpha: 0.4,
+                        ),
+                        disabledForegroundColor: Colors.white.withValues(
+                          alpha: 0.7,
+                        ),
                         minimumSize: const Size.fromHeight(56),
                         elevation: 0,
                         shape: RoundedRectangleBorder(

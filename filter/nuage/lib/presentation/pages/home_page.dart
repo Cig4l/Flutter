@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nuage/domain/entities/dragon.dart';
 import 'package:nuage/domain/entities/task.dart';
 import 'package:nuage/domain/entities/task_category.dart';
+import 'package:nuage/presentation/navigation/show_levelup_flow.dart';
 import 'package:nuage/presentation/pages/create_task_page.dart';
 import 'package:nuage/presentation/pages/home_notifier.dart';
 import 'package:nuage/presentation/pages/update_task_page.dart';
@@ -18,18 +19,19 @@ String _backgroundAsset(Dragon dragon) {
     case 0:
       return 'assets/images/dragon/egg-bg.jpg';
     case 1:
-      return 'assets/dragon/baby-bg.jpg';
+      return 'assets/images/dragon/baby-bg.jpg';
     case 2:
-      return 'assets/dragon/teen-bg.jpg';
+      return 'assets/images/dragon/teen-bg.jpg';
     case 3:
-      return 'assets/dragon/adult-bg.jpg';
+      return 'assets/images/dragon/adult-bg.jpg';
     default:
       return 'assets/images/dragon/egg-bg.jpg';
   }
 }
 
 Color CategoryColor(TaskCategory c) =>
-    TaskCategoryUi.categoryPalette[c.index % TaskCategoryUi.categoryPalette.length];
+    TaskCategoryUi.categoryPalette[c.index %
+        TaskCategoryUi.categoryPalette.length];
 
 // ---------------------------------------------------------------------------
 // Page
@@ -39,6 +41,24 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<Dragon?>(homeProvider.select((s) => s.value?.dragon), (
+      prev,
+      next,
+    ) {
+      if (prev == null || next == null) return;
+
+      // Uniquement quand le NIVEAU change, pas à chaque gain d'exp.
+      if (next.level != prev.level) {
+        showLevelUpFlow(
+          context,
+          from: prev,
+          to: next,
+          onRename: (name) =>
+              ref.read(homeProvider.notifier).renameDragon(name),
+        );
+      }
+    });
+
     final homeAsync = ref.watch(homeProvider);
 
     return Scaffold(
@@ -57,7 +77,7 @@ class HomePage extends ConsumerWidget {
       body: homeAsync.when(
         loading: () =>
             const Center(child: CircularProgressIndicator(color: Colors.white)),
-        error: (_, _) => const HomeUienteredMessage(
+        error: (_, _) => const CenteredMessage(
           emoji: '😵',
           title: 'Impossible to load your creature',
           subtitle: 'Check your connection and try again.',
@@ -65,7 +85,7 @@ class HomePage extends ConsumerWidget {
         data: (data) => SingleChildScrollView(
           child: Column(
             children: [
-              HomeUireatureHeader(dragon: data.dragon),
+              CreatureHeader(dragon: data.dragon),
               _GrowBanner(dragon: data.dragon),
               _TaskArea(data: data),
               const SizedBox(height: 88), // space for FAB
@@ -80,10 +100,10 @@ class HomePage extends ConsumerWidget {
 // ---------------------------------------------------------------------------
 // Header
 // ---------------------------------------------------------------------------
-class HomeUireatureHeader extends StatelessWidget {
+class CreatureHeader extends StatelessWidget {
   final Dragon dragon;
 
-  const HomeUireatureHeader({super.key, required this.dragon});
+  const CreatureHeader({super.key, required this.dragon});
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +213,7 @@ class _TaskArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data.hasNoTasks) {
-      return const HomeUienteredMessage(
+      return const CenteredMessage(
         emoji: '🥚',
         title: 'Nothing to do for the moment',
         subtitle:
@@ -203,7 +223,7 @@ class _TaskArea extends StatelessWidget {
 
     final grouped = data.groupedTasks;
     if (grouped.isEmpty) {
-      return const HomeUienteredMessage(
+      return const CenteredMessage(
         emoji: '🎉',
         title: 'All done!',
         subtitle: 'Your tasks will spawn again tomorrow. Great job!',
@@ -215,7 +235,7 @@ class _TaskArea extends StatelessWidget {
       child: Column(
         children: [
           for (final entry in grouped.entries)
-            HomeUiategorySection(category: entry.key, tasks: entry.value),
+            CategorySection(category: entry.key, tasks: entry.value),
         ],
       ),
     );
@@ -225,17 +245,21 @@ class _TaskArea extends StatelessWidget {
 // ---------------------------------------------------------------------------
 // Category Section
 // ---------------------------------------------------------------------------
-class HomeUiategorySection extends StatefulWidget {
+class CategorySection extends StatefulWidget {
   final TaskCategory category;
   final List<Task> tasks;
 
-  const HomeUiategorySection({super.key, required this.category, required this.tasks});
+  const CategorySection({
+    super.key,
+    required this.category,
+    required this.tasks,
+  });
 
   @override
-  State<HomeUiategorySection> createState() => HomeUiategorySectionState();
+  State<CategorySection> createState() => CategorySectionState();
 }
 
-class HomeUiategorySectionState extends State<HomeUiategorySection> {
+class CategorySectionState extends State<CategorySection> {
   bool _expanded = true;
 
   @override
@@ -391,7 +415,6 @@ class _TaskCard extends StatelessWidget {
         children: [
           const Icon(Icons.drag_indicator, color: Color(0xFFCFCFCF), size: 18),
           const SizedBox(width: 6),
-          // Pastille : emoji dérivé de la catégorie (plus de task.icon)
           Container(
             width: 40,
             height: 40,
@@ -440,12 +463,13 @@ class _TaskCard extends StatelessWidget {
 // ---------------------------------------------------------------------------
 // Centered Message
 // ---------------------------------------------------------------------------
-class HomeUienteredMessage extends StatelessWidget {
+class CenteredMessage extends StatelessWidget {
   final String emoji;
   final String title;
   final String subtitle;
 
-  const HomeUienteredMessage({super.key, 
+  const CenteredMessage({
+    super.key,
     required this.emoji,
     required this.title,
     required this.subtitle,

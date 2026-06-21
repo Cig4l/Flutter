@@ -102,6 +102,18 @@ class HomeNotifier extends AsyncNotifier<HomeData> {
       currentHomeData.copyWith(tasks: markedTasks, dragon: result.dragon),
     );
   }
+
+  Future<void> renameDragon(String name) async {
+    final current = state.value;
+    if (current == null) return;
+
+    final updatedDragon = current.dragon.copyWith(name: name);
+
+    await ref.read(dragonRepositoryProvider).updateDragon(updatedDragon);
+    if (!ref.mounted) return;
+
+    state = AsyncData(HomeData(dragon: updatedDragon, tasks: current.tasks));
+  }
 }
 
 final homeProvider = AsyncNotifierProvider<HomeNotifier, HomeData>(

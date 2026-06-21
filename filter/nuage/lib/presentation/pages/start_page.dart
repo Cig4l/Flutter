@@ -4,7 +4,6 @@ import 'package:nuage/core/dragon_repository_provider.dart';
 import 'package:nuage/presentation/pages/home_page.dart';
 import 'package:nuage/presentation/pages/onboarding_page.dart';
 import 'package:nuage/presentation/themes/start_ui.dart';
-import 'package:nuage/presentation/widgets/dragon_avatar.dart';
 
 class StartPage extends ConsumerWidget {
   const StartPage({super.key});
@@ -36,7 +35,7 @@ class StartPage extends ConsumerWidget {
           child: Column(
             children: [
               const Spacer(flex: 3),
-              const DragonAvatar(size: 200),
+              const _DragonAvatar(size: 200),
               const SizedBox(height: 36),
               const Text(
                 'Nuage',
@@ -85,6 +84,29 @@ class StartPage extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _DragonAvatar extends StatelessWidget {
+  const _DragonAvatar({this.size = 200});
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 4),
+      ),
+      child: CircleAvatar(
+        radius: size / 2,
+        backgroundColor: Colors.transparent,
+        backgroundImage: const AssetImage('assets/images/dragon-avatar.jpg'),
       ),
     );
   }

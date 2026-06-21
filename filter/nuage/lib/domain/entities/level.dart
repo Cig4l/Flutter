@@ -12,7 +12,7 @@ enum Level {
     switch(this) {
       case one: return two;
       case two: return three;
-      case three: return three;
+      case three: return four;
       case four: return four;
     }
   }
