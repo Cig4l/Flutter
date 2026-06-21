@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nuage/core/app_images.dart';
 import 'package:nuage/core/dragon_repository_provider.dart';
 import 'package:nuage/presentation/pages/home_page.dart';
 import 'package:nuage/presentation/pages/onboarding_page.dart';
@@ -106,7 +107,7 @@ class _DragonAvatar extends StatelessWidget {
       child: CircleAvatar(
         radius: size / 2,
         backgroundColor: Colors.transparent,
-        backgroundImage: const AssetImage('assets/images/dragon-avatar.jpg'),
+        backgroundImage: const AssetImage(AppImages.avatar),
       ),
     );
   }

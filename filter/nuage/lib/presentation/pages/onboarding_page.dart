@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nuage/core/app_images.dart';
 import 'package:nuage/core/providers.dart';
 import 'package:nuage/domain/entities/dragon.dart';
 import 'package:nuage/presentation/pages/home_page.dart';
@@ -57,7 +58,7 @@ class OnboardingPage extends ConsumerWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 16),
                           child: Image.asset(
-                            'assets/images/dragon/egg.png',
+                            AppImages.dragon.egg,
                             height: 150,
                           ),
                         ),

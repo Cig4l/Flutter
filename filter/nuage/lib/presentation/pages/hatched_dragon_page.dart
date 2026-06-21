@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nuage/core/app_images.dart';
 import 'package:nuage/presentation/themes/level_up_ui.dart';
 
 class HatchedDragonPage extends StatelessWidget {
@@ -28,7 +29,7 @@ class HatchedDragonPage extends StatelessWidget {
               ),
               const Spacer(flex: 2),
 
-              Image.asset('assets/images/dragon/baby.png', height: 260),
+              Image.asset(AppImages.dragon.baby, height: 260),
 
               const Spacer(flex: 3),
 

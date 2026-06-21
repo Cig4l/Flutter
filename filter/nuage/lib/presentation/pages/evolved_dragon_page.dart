@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nuage/core/app_images.dart';
 import 'package:nuage/domain/entities/dragon.dart';
 import 'package:nuage/domain/entities/level.dart';
 import 'package:nuage/presentation/themes/level_up_ui.dart';
@@ -16,15 +17,15 @@ class EvolvedDragonPage extends StatelessWidget {
   String _dragonAsset(Level level) {
   switch (level.index) {
     case 0:
-      return 'assets/images/dragon/egg.png';
+      return AppImages.dragon.egg;
     case 1:
-      return 'assets/images/dragon/baby.png';
+      return AppImages.dragon.baby;
     case 2:
-      return 'assets//images/dragon/teen.png';
+      return AppImages.dragon.teen;
     case 3:
-      return 'assets/images/dragon/adult.png';
+      return AppImages.dragon.adult;
     default:
-      return 'assets/images/dragon/egg.png';
+      return AppImages.dragon.egg;
   }
 }
 

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:nuage/core/app_images.dart';
 import 'package:nuage/presentation/themes/level_up_ui.dart';
 
 class NamingDragonPage extends StatefulWidget {
@@ -80,7 +81,7 @@ class _NameDragonPageState extends State<NamingDragonPage> {  // TODO notifier a
                   alignment: Alignment.center,
                   children: [
                     Image.asset(
-                      'assets/images/dragon/baby.png',
+                      AppImages.dragon.baby,
                       height: 220,
                     ),
                     const Positioned(

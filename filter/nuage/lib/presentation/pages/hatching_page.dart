@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:nuage/core/app_images.dart';
 import 'package:nuage/presentation/themes/level_up_ui.dart';
 
 class HatchingDragonPage extends StatefulWidget {
@@ -85,7 +86,7 @@ class _HatchingPageState extends State<HatchingDragonPage>
                     return Transform.rotate(angle: angle, child: child);
                   },
                   child: Image.asset(
-                    'assets/images/dragon/cracked-egg.png',
+                    AppImages.crackedEgg,
                     height: 240,
                   ),
                 ),

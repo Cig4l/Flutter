@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nuage/core/app_images.dart';
 
 import 'package:nuage/domain/entities/dragon.dart';
 import 'package:nuage/domain/entities/task.dart';
@@ -19,15 +20,15 @@ import 'package:nuage/presentation/themes/task_category_ui.dart';
 String _backgroundAsset(Dragon dragon) {
   switch (dragon.level.index) {
     case 0:
-      return 'assets/images/dragon/egg-bg.jpg';
+      return AppImages.backgrounds.egg;
     case 1:
-      return 'assets/images/dragon/baby-bg.jpg';
+      return AppImages.backgrounds.baby;
     case 2:
-      return 'assets/images/dragon/teen-bg.jpg';
+      return AppImages.backgrounds.teen;
     case 3:
-      return 'assets/images/dragon/adult-bg.jpg';
+      return AppImages.backgrounds.adult;
     default:
-      return 'assets/images/dragon/egg-bg.jpg';
+      return AppImages.backgrounds.egg;
   }
 }
 
